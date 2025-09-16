@@ -15,7 +15,7 @@ Client VM                    Server VMs (01-10)
 - **Fault Tolerance**: Graceful handling of VM failures
 
 
-## 📋 Table of Contents
+## Table of Contents
 - [System Overview](#system-overview)
 - [Project Structure](#project-structure)
 - [Setup](#setup)
