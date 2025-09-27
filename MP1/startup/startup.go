@@ -1,11 +1,12 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "os"
-    "golang.org/x/crypto/ssh"
+	"fmt"
+	"log"
+	"os"
 	"sync"
+
+	"golang.org/x/crypto/ssh"
 )
 
 // runs a given string command on all 10 VMs, authenticated with client config
@@ -31,7 +32,7 @@ func Run(cmd string, config *ssh.ClientConfig) {
 
 			session.Stdout = os.Stdout
 			session.Stderr = os.Stderr
-			
+
 			err = session.Run(cmd)
 
 		}()
@@ -67,8 +68,8 @@ func ClearLogs(config *ssh.ClientConfig) {
 
 				session.Stdout = os.Stdout
 				session.Stderr = os.Stderr
-				cmd := fmt.Sprintf("cd ~/gb4/log && rm -f vm%d.log", i)
-			
+				cmd := fmt.Sprintf("cd ~/mw128/log && rm -f vm%d.log", i)
+
 				err = session.Run(cmd)
 
 				session.Close()
@@ -81,9 +82,9 @@ func ClearLogs(config *ssh.ClientConfig) {
 func main() {
 	// custom path needed for each user
 	// perhaps make the keyPath a cmd line arg
-	privateKeyPath := "/Users/noahhan/.ssh/id_ed25519"
+	privateKeyPath := "C:\\Users\\mjwu1\\.ssh\\id_ed25519"
 	privateKey, err := os.ReadFile(privateKeyPath)
-	
+
 	if err != nil {
 		log.Fatalf("error: unable to open file")
 	}
@@ -94,23 +95,23 @@ func main() {
 		log.Fatalf("error: unable to process key")
 	}
 
-    config := &ssh.ClientConfig{
-        User: "njhan2",
-        Auth: []ssh.AuthMethod{
-            ssh.PublicKeys(signer),
+	config := &ssh.ClientConfig{
+		User: "mw128",
+		Auth: []ssh.AuthMethod{
+			ssh.PublicKeys(signer),
 		},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
-	
+
 	// different cmd line args can be passed to execute cmds on all VMs
 	if len(os.Args) == 2 {
 		if os.Args[1] == "wake" {
-			cmd := "pkill -9 server; cd ~/gb4/server && go run server.go"
+			cmd := "pkill -9 server; cd ~/cs-425-mp-1/server && go run server.go"
 			Run(cmd, config)
 			return
 		}
 		if os.Args[1] == "pull" {
-			cmd := "cd ~/gb4/server && git fetch origin && git reset --hard origin/main"
+			cmd := "cd ~/cs-425-mp-1/server && git fetch origin && git reset --hard origin/main"
 			Run(cmd, config)
 			return
 		}
